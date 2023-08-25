@@ -10,7 +10,7 @@ module "s3_bucket_landing" {
 }
 
 resource "aws_s3_object" "input_path" {
-  bucket = "${module.s3_bucket_landing.s3_bucket_id}"
+  bucket = var.s3_bucket_landing.name
   acl    = "private"
   key    = "${var.s3_bucket_landing.input}"
   source = "${var.s3_bucket_landing.input}"

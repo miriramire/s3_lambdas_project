@@ -10,13 +10,13 @@ module "s3_bucket_landing" {
 }
 
 resource "aws_s3_object" "input_path" {
-  bucket = s3_bucket_landing.s3_bucket_id
+  bucket = module.s3_bucket_landing.s3_bucket_id
   key    = var.s3_bucket_landing.input
   source = var.s3_bucket_landing.input
 }
 
 resource "aws_s3_object" "output_path" {
-  bucket = s3_bucket_landing.s3_bucket_id
+  bucket = module.s3_bucket_landing.s3_bucket_id
   key    = var.s3_bucket_landing.output
   source = var.s3_bucket_landing.output
 }

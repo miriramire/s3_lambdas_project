@@ -14,16 +14,7 @@ resource "aws_s3_bucket_object" "input_folder" {
   key    = "${var.s3_bucket_landing.input}/"
 }
 
-#resource "aws_s3_object" "input_path" {
-#  bucket = var.s3_bucket_landing.name
-#  acl    = "private"
-#  key    = "${var.s3_bucket_landing.input}"
-#  source = "/${var.s3_bucket_landing.input}"
-#  etag = filemd5("/${var.s3_bucket_landing.input}")
-#}
-
-#resource "aws_s3_object" "output_path" {
-#  bucket = module.s3_bucket_landing.s3_bucket_id
-#  key    = var.s3_bucket_landing.output
-#  source = var.s3_bucket_landing.output
-#}
+resource "aws_s3_bucket_object" "output_folder" {
+  bucket = var.s3_bucket_landing.name
+  key    = "${var.s3_bucket_landing.output}/"
+}

@@ -7,7 +7,7 @@ variable "s3_bucket_landing" {
   })
 
   default = {
-    name    = "landing_test_data_terraform_project_101"
+    name    = "landing-test-data-terraform-project-101"
     input   = "input"
     output  = "output"
   }

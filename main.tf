@@ -21,12 +21,13 @@ resource "aws_s3_object" "output_folder" {
 
 # My lambda function
 module "lambda" {
-  source           = "../../"
-  description      = "Example AWS Lambda using python with S3 trigger"
-  filename         = var.lambda.lambda_zip_location
+  source           = "terraform-aws-modules/lambda/aws"
+
   function_name    = var.lambda.function_name
+  description      = "Example AWS Lambda using python with S3 trigger"
   handler          = var.lambda.handler
   runtime          = var.lambda.runtime
+  filename         = var.lambda.lambda_zip_location
   # source_code_hash = filebase64sha256("${var.lambda.lambda_zip_location}")
 
   event = {

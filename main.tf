@@ -31,26 +31,34 @@ resource "aws_lambda_function" "s3_transform_function" {
   # source_code_hash = filebase64sha256("${var.lambda.lambda_zip_location}")
 }
 
-#resource "aws_s3_bucket_notification" "s3_event_trigger" {
-#  bucket = var.s3_bucket_landing.name
-#
-#  lambda_function {
-#    lambda_function_arn = aws_lambda_function.s3_transform_function.arn
-#    events             = ["s3:ObjectCreated:*"]
-#    filter_prefix      = ""
-#    filter_suffix      = ""
-#  }
-#}
+resource "aws_s3_bucket_notification" "s3_event_trigger" {
+  bucket = var.s3_bucket_landing.name
 
-resource "aws_lambda_event_source_mapping" "s3_trigger" {
-  event_source_arn = module.s3_bucket_landing.s3_bucket_arn  # Replace 'your_bucket' with your bucket name
-  function_name    = aws_lambda_function.s3_transform_function.arn  # Replace with your Lambda function's ARN
-  event_source     = "aws:s3"
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.s3_transform_function.arn
+    events             = ["s3:ObjectCreated:*"]
+    filter_prefix      = "${var.s3_bucket_landing.input}"
+    filter_suffix      = ""
+  }
+}
+
+resource "aws_lambda_permission" "test" {
+  statement_id  = "AllowS3Invoke"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.s3_transform_function.function_name}"
+  principal = "s3.amazonaws.com"
+  source_arn = "arn:aws:s3:::${var.s3_bucket_landing.name}"
+}
+
+#resource "aws_lambda_event_source_mapping" "s3_trigger" {
+#  event_source_arn = module.s3_bucket_landing.s3_bucket_arn  # Replace 'your_bucket' with your bucket name
+#  function_name    = aws_lambda_function.s3_transform_function.arn  # Replace with your Lambda function's ARN
+#  event_source     = "aws:s3"
 
   #filter_criteria {
   #  input_folder = "input"
   #}
-  filter {
-    prefix = "input/"
-  }
-}
+#  filter {
+#    prefix = "input/"
+#  }
+#}

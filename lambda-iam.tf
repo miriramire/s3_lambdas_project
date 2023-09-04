@@ -17,14 +17,23 @@ resource "aws_iam_policy" "lambda_s3_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action   = "s3:GetObject"
-        Effect   = "Allow"
-        Resource = "arn:aws:s3:::${var.s3_bucket_landing.name}/${var.s3_bucket_landing.input}/*"
+        Effect = "Allow"
+        Action = [
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
       },
       {
-        Action   = "s3:PutObject"
         Effect   = "Allow"
-        Resource = "arn:aws:s3:::${var.s3_bucket_landing.name}/${var.s3_bucket_landing.output}/*" 
+        Action   = [
+          "s3:*"
+        ]
+        Resource = [
+          "arn:aws:s3:::${var.s3_bucket_landing.name}/*",
+          "arn:aws:s3:::${var.s3_bucket_landing.name}"
+        ]
       }
     ]
   })

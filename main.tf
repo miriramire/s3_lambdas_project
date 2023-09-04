@@ -20,6 +20,11 @@ resource "aws_s3_object" "output_folder" {
 }
 
 # My lambda function
+data "archive_file" "lambdafunc" {
+    type = "zip"
+    source_file = "${var.lambda.source_file}"
+    output_path = "${var.lambda.lambda_zip_location}"
+}
 resource "aws_lambda_function" "s3_transform_function" {
   function_name    = var.lambda.function_name
   description      = "Example AWS Lambda using python with S3 trigger"
@@ -28,7 +33,7 @@ resource "aws_lambda_function" "s3_transform_function" {
   filename         = var.lambda.lambda_zip_location
 
   role          = "${aws_iam_role.lambda_role.arn}"
-  # source_code_hash = filebase64sha256("${var.lambda.lambda_zip_location}")
+  source_code_hash = filebase64sha256("${var.lambda.lambda_zip_location}")
 }
 
 resource "aws_s3_bucket_notification" "s3_event_trigger" {
@@ -49,16 +54,3 @@ resource "aws_lambda_permission" "test" {
   principal = "s3.amazonaws.com"
   source_arn = "arn:aws:s3:::${var.s3_bucket_landing.name}"
 }
-
-#resource "aws_lambda_event_source_mapping" "s3_trigger" {
-#  event_source_arn = module.s3_bucket_landing.s3_bucket_arn  # Replace 'your_bucket' with your bucket name
-#  function_name    = aws_lambda_function.s3_transform_function.arn  # Replace with your Lambda function's ARN
-#  event_source     = "aws:s3"
-
-  #filter_criteria {
-  #  input_folder = "input"
-  #}
-#  filter {
-#    prefix = "input/"
-#  }
-#}

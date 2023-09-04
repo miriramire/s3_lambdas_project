@@ -16,6 +16,7 @@ variable "s3_bucket_landing" {
 variable "lambda" {
   description = "Lambda details"
   type = object({
+    source_file = string
     function_name = string
     handler = string
     lambda_zip_location = string
@@ -23,9 +24,10 @@ variable "lambda" {
   })
 
   default = {
-    function_name = "lambda_s3"
-    handler = "welcome.hello"
-    lambda_zip_location = "outputs/welcome.zip"
+    source_file = "lambdafunc.py"
+    function_name = "lambdafunc"
+    handler = "lambdafunc.lambda_handler"
+    lambda_zip_location = "outputs/lambdafunc.zip"
     runtime = "python3.10"
   }
   

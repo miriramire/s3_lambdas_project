@@ -33,7 +33,8 @@ resource "aws_lambda_function" "s3_transform_function" {
   filename         = var.lambda.lambda_zip_location
 
   role          = "${aws_iam_role.lambda_role.arn}"
-  source_code_hash = filebase64sha256("${var.lambda.lambda_zip_location}")
+  #source_code_hash = filebase64sha256("${var.lambda.lambda_zip_location}")
+  source_code_hash = data.archive_file.lambdafunc.output_base64sha256
 }
 
 resource "aws_s3_bucket_notification" "s3_event_trigger" {
